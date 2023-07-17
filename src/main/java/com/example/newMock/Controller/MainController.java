@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
@@ -18,7 +17,7 @@ public class MainController {
     private Logger log = LoggerFactory.getLogger(MainController.class);
 
     ObjectMapper mapper = new ObjectMapper();
-
+    public long start_time = 0L;
 
 
     @PostMapping(
@@ -55,8 +54,15 @@ public class MainController {
             responseDTO.setAccount(requestDTO.getAccount());
             responseDTO.setBalance(Integer.toString(randomNum));
             responseDTO.setMaxLimit(maxLimit);
-            log.error("\n***** Request ******\n " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestDTO));
-            log.error("\n***** Response ******\n " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseDTO));
+            log.error("***** Request ****** " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestDTO));
+            log.error("***** Response ****** " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseDTO));
+
+            long pacing = ThreadLocalRandom.current().nextLong(100, 500);
+            long end_time = System.currentTimeMillis();
+            if (end_time - start_time < pacing) {
+                Thread.sleep(pacing - (end_time - start_time));
+            }
+
             return responseDTO;
         }
         catch(Exception e)
