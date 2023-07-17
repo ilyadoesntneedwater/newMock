@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 
 public class RequestDTO {
+
     private String rqUID;
     private String clientId;
     private String account;
